@@ -1,0 +1,1185 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/davidch91/Desktop/613/HW5/HW5_result.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}16 Apr 2019, 22:05:44
+
+{com}. 
+. *HW2 OLS and Discrete Choice
+
+. 
+. *Ex1:Data Creation
+
+. set seed 143
+
+. set obs 10000
+{txt}{p}
+number of observations (_N)  was 0,
+now 10,000
+{p_end}
+
+{com}. gen X1 = runiform(1,3)
+
+. gen X2 = rgamma(3,2)
+
+. gen X3 = rbinomial(10,0.3)
+
+. gen eps = rnormal(2,1)
+
+. gen Y = 0.5+(1.2*X1)-(0.9*X2)+(0.1*X3)+eps
+
+. gen ydum=0
+
+. replace ydum=1 if Y>-0.14295
+{txt}(5,641 real changes made)
+
+{com}. 
+. *Ex2: OLS
+
+. corr Y X1
+{txt}(obs=10,000)
+
+             {c |}        Y       X1
+{hline 13}{c +}{hline 18}
+           Y {c |}{res}   1.0000
+          {txt}X1 {c |}{res}   0.2121   1.0000
+
+
+{com}. eststo OLS: reg Y X1 X2 X3
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}    10,000
+{txt}{hline 13}{c +}{hline 34}   F(3, 9996)      = {res} 34785.70
+{txt}       Model {c |} {res} 102838.601         3  34279.5336   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 9850.54762     9,996  .985448942   {txt}R-squared       ={res}    0.9126
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.9126
+{txt}       Total {c |} {res} 112689.148     9,999  11.2700419   {txt}Root MSE        =   {res}  .9927
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           Y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}X1 {c |}{col 14}{res}{space 2} 1.207846{col 26}{space 2} .0171768{col 37}{space 1}   70.32{col 46}{space 3}0.000{col 54}{space 4} 1.174176{col 67}{space 3} 1.241516
+{txt}{space 10}X2 {c |}{col 14}{res}{space 2}-.9021271{col 26}{space 2} .0028673{col 37}{space 1} -314.63{col 46}{space 3}0.000{col 54}{space 4}-.9077475{col 67}{space 3}-.8965066
+{txt}{space 10}X3 {c |}{col 14}{res}{space 2} .0955164{col 26}{space 2} .0068672{col 37}{space 1}   13.91{col 46}{space 3}0.000{col 54}{space 4} .0820553{col 67}{space 3} .1089774
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.504491{col 26}{space 2} .0448477{col 37}{space 1}   55.84{col 46}{space 3}0.000{col 54}{space 4} 2.416581{col 67}{space 3} 2.592402
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. 
+. net install spost9_ado, from(http://www.indiana.edu/~jslsoc/stata) replace
+checking {hilite:spost9_ado} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. 
+. *Ex4&5: Discrete Choice & Marginal Effects:
+
+. eststo LPM: reg ydum X1 X2 X3
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}    10,000
+{txt}{hline 13}{c +}{hline 34}   F(3, 9996)      = {res}  4112.20
+{txt}       Model {c |} {res}  1358.3114         3  452.770467   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res}  1100.6005     9,996  .110104091   {txt}R-squared       ={res}    0.5524
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5523
+{txt}       Total {c |} {res}  2458.9119     9,999  .245915782   {txt}Root MSE        =   {res} .33182
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}        ydum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}X1 {c |}{col 14}{res}{space 2} .1486342{col 26}{space 2} .0057415{col 37}{space 1}   25.89{col 46}{space 3}0.000{col 54}{space 4} .1373796{col 67}{space 3} .1598887
+{txt}{space 10}X2 {c |}{col 14}{res}{space 2}-.1033228{col 26}{space 2} .0009584{col 37}{space 1} -107.80{col 46}{space 3}0.000{col 54}{space 4}-.1052015{col 67}{space 3}-.1014441
+{txt}{space 10}X3 {c |}{col 14}{res}{space 2} .0092157{col 26}{space 2} .0022954{col 37}{space 1}    4.01{col 46}{space 3}0.000{col 54}{space 4} .0047162{col 67}{space 3} .0137153
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8538059{col 26}{space 2} .0149908{col 37}{space 1}   56.96{col 46}{space 3}0.000{col 54}{space 4} .8244209{col 67}{space 3} .8831909
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. eststo logit: logit ydum X1 X2 X3
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res: -6849.069}  
+Iteration 1:{space 3}log likelihood = {res:-2272.0591}  
+Iteration 2:{space 3}log likelihood = {res:-2211.5768}  
+Iteration 3:{space 3}log likelihood = {res:-2188.0402}  
+Iteration 4:{space 3}log likelihood = {res: -2187.928}  
+Iteration 5:{space 3}log likelihood = {res: -2187.928}  
+{res}
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}LR chi2({res}3{txt}){col 67}= {res}   9322.28
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res} -2187.928{txt}{col 49}Pseudo R2{col 67}= {res}    0.6806
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}        ydum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}X1 {c |}{col 14}{res}{space 2} 2.222583{col 26}{space 2} .0820356{col 37}{space 1}   27.09{col 46}{space 3}0.000{col 54}{space 4} 2.061796{col 67}{space 3} 2.383369
+{txt}{space 10}X2 {c |}{col 14}{res}{space 2}-1.621309{col 26}{space 2} .0369387{col 37}{space 1}  -43.89{col 46}{space 3}0.000{col 54}{space 4}-1.693708{col 67}{space 3}-1.548911
+{txt}{space 10}X3 {c |}{col 14}{res}{space 2} .1574296{col 26}{space 2} .0268456{col 37}{space 1}    5.86{col 46}{space 3}0.000{col 54}{space 4} .1048133{col 67}{space 3}  .210046
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 4.724927{col 26}{space 2} .1923543{col 37}{space 1}   24.56{col 46}{space 3}0.000{col 54}{space 4} 4.347919{col 67}{space 3} 5.101934
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: 102 failures and 0 successes completely determined.{p_end}
+
+{com}. eststo MElogit: prchange
+
+{res}logit{txt}: Changes in Probabilities for {res}ydum
+
+    {txt}min->max      0->1     -+1/2    -+sd/2  MargEfct
+X1  {res}  0.8045    0.0855    0.5047    0.3105    0.5556
+{txt}X2  {res} -0.9999   -0.0003   -0.3845   -0.8861   -0.4053
+{txt}X3  {res}  0.3360    0.0378    0.0393    0.0568    0.0394
+
+         {txt}     0       1
+Pr(y|x)  {res}0.5006  0.4994
+
+       {txt}     X1       X2       X3
+   x=  {res} 2.0026  5.95164   2.9926
+{txt}sd_x=  {res}.577974  3.46237  1.44567
+
+{com}. eststo probit: probit ydum X1 X2 X3
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res: -6849.069}  
+Iteration 1:{space 3}log likelihood = {res:-2296.2158}  
+Iteration 2:{space 3}log likelihood = {res:-2183.5891}  
+Iteration 3:{space 3}log likelihood = {res:-2182.1138}  
+Iteration 4:{space 3}log likelihood = {res:-2182.1116}  
+Iteration 5:{space 3}log likelihood = {res:-2182.1116}  
+{res}
+{txt}Probit regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}LR chi2({res}3{txt}){col 67}= {res}   9333.91
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-2182.1116{txt}{col 49}Pseudo R2{col 67}= {res}    0.6814
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}        ydum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}X1 {c |}{col 14}{res}{space 2} 1.227518{col 26}{space 2} .0439232{col 37}{space 1}   27.95{col 46}{space 3}0.000{col 54}{space 4}  1.14143{col 67}{space 3} 1.313606
+{txt}{space 10}X2 {c |}{col 14}{res}{space 2}-.9037181{col 26}{space 2} .0186063{col 37}{space 1}  -48.57{col 46}{space 3}0.000{col 54}{space 4}-.9401858{col 67}{space 3}-.8672504
+{txt}{space 10}X3 {c |}{col 14}{res}{space 2} .0855502{col 26}{space 2} .0149152{col 37}{space 1}    5.74{col 46}{space 3}0.000{col 54}{space 4} .0563168{col 67}{space 3} .1147835
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  2.65882{col 26}{space 2} .1047424{col 37}{space 1}   25.38{col 46}{space 3}0.000{col 54}{space 4} 2.453529{col 67}{space 3} 2.864112
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: 522 failures and 6 successes completely determined.{p_end}
+
+{com}. eststo MEprobit: prchange
+
+{res}probit{txt}: Changes in Probabilities for {res}ydum
+
+    {txt}min->max      0->1     -+1/2    -+sd/2  MargEfct
+X1  {res}  0.7803    0.1013    0.4606    0.2772    0.4897
+{txt}X2  {res} -1.0000   -0.0000   -0.3486   -0.8823   -0.3605
+{txt}X3  {res}  0.2976    0.0333    0.0341    0.0493    0.0341
+
+         {txt}     0       1
+Pr(y|x)  {res}0.5022  0.4978
+
+       {txt}     X1       X2       X3
+   x=  {res} 2.0026  5.95164   2.9926
+{txt}sd_x=  {res}.577974  3.46237  1.44567
+
+{com}. esttab OLS LPM logit probit, nodepvars nogaps noeqlines se(3) title(Comparison of Coefficients Across Models)
+{res}
+{txt}Comparison of Coefficients Across Models
+{txt}{hline 76}
+{txt}                      (1)             (2)             (3)             (4)   
+{txt}                      OLS             LPM           logit          probit   
+{txt}{hline 76}
+{res}main                                                                        {txt}
+{txt}X1          {res}        1.208***        0.149***        2.223***        1.228***{txt}
+            {res} {ralign 12:{txt:(}0.017{txt:)}}    {ralign 12:{txt:(}0.006{txt:)}}    {ralign 12:{txt:(}0.082{txt:)}}    {ralign 12:{txt:(}0.044{txt:)}}   {txt}
+{txt}X2          {res}       -0.902***       -0.103***       -1.621***       -0.904***{txt}
+            {res} {ralign 12:{txt:(}0.003{txt:)}}    {ralign 12:{txt:(}0.001{txt:)}}    {ralign 12:{txt:(}0.037{txt:)}}    {ralign 12:{txt:(}0.019{txt:)}}   {txt}
+{txt}X3          {res}       0.0955***      0.00922***        0.157***       0.0856***{txt}
+            {res} {ralign 12:{txt:(}0.007{txt:)}}    {ralign 12:{txt:(}0.002{txt:)}}    {ralign 12:{txt:(}0.027{txt:)}}    {ralign 12:{txt:(}0.015{txt:)}}   {txt}
+{txt}_cons       {res}        2.504***        0.854***        4.725***        2.659***{txt}
+            {res} {ralign 12:{txt:(}0.045{txt:)}}    {ralign 12:{txt:(}0.015{txt:)}}    {ralign 12:{txt:(}0.192{txt:)}}    {ralign 12:{txt:(}0.105{txt:)}}   {txt}
+{txt}{hline 76}
+{txt}N           {res}        10000           10000           10000           10000   {txt}
+{txt}{hline 76}
+{txt}Standard errors in parentheses
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. esttab MElogit MEprobit, se(3) nodepvars nogaps noeqlines title(Marginal Effects of Logit & Probit)
+{res}
+{txt}Marginal Effects of Logit & Probit
+{txt}{hline 44}
+{txt}                      (1)             (2)   
+{txt}                  MElogit        MEprobit   
+{txt}{hline 44}
+{res}ydum                                        {txt}
+{txt}X1          {res}        2.223***        1.228***{txt}
+            {res} {ralign 12:{txt:(}0.082{txt:)}}    {ralign 12:{txt:(}0.044{txt:)}}   {txt}
+{txt}X2          {res}       -1.621***       -0.904***{txt}
+            {res} {ralign 12:{txt:(}0.037{txt:)}}    {ralign 12:{txt:(}0.019{txt:)}}   {txt}
+{txt}X3          {res}        0.157***       0.0856***{txt}
+            {res} {ralign 12:{txt:(}0.027{txt:)}}    {ralign 12:{txt:(}0.015{txt:)}}   {txt}
+{txt}_cons       {res}        4.725***        2.659***{txt}
+            {res} {ralign 12:{txt:(}0.192{txt:)}}    {ralign 12:{txt:(}0.105{txt:)}}   {txt}
+{txt}{hline 44}
+{txt}N           {res}        10000           10000   {txt}
+{txt}{hline 44}
+{txt}Standard errors in parentheses
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. 
+. *HW3 Multinomial Choices
+
+. 
+. *Having exported the margarine data from R and merged them
+
+. *We first load data(margarine) in R, then use write.dta function in R
+
+. 
+. *Merging both choicePrice and demos in Stata
+
+. use "/Users/davidch91/Desktop/613/HW5/choicePrice.dta", clear
+{txt}(Written by R.              )
+
+{com}. merge m:m hhid using "/Users/davidch91/Desktop/613/HW5/demos.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+hhid was 
+long, now double to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}               0
+{txt}{col 5}matched{col 30}{res}           4,470{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. save "/Users/davidch91/Desktop/613/HW5/margarine.dta", replace
+{txt}file /Users/davidch91/Desktop/613/HW5/margarine.dta saved
+
+{com}. 
+. generate chosen= "Pk_Stk"
+
+. replace chosen="BB_Stk" if choice==2
+{txt}(699 real changes made)
+
+{com}. replace chosen="Fl_Stk" if choice==3
+{txt}(243 real changes made)
+
+{com}. replace chosen="Hse_Stk" if choice==4
+{txt}variable {bf}chosen{sf} was {bf}{res}str6{sf}{txt} now {bf}{res}str7{sf}
+{txt}(593 real changes made)
+
+{com}. replace chosen="Gen_Stk" if choice==5
+{txt}(315 real changes made)
+
+{com}. replace chosen="Imp_Stk" if choice==6
+{txt}(74 real changes made)
+
+{com}. replace chosen="SS_Tub" if choice==7
+{txt}(319 real changes made)
+
+{com}. replace chosen="Pk_Tub" if choice==8
+{txt}(203 real changes made)
+
+{com}. replace chosen="Fl_Tub" if choice==9
+{txt}(225 real changes made)
+
+{com}. replace chosen="Hse_Tub" if choice==10
+{txt}(33 real changes made)
+
+{com}. encode(chosen), gen(chosenprod)
+
+. 
+. *Ex1-Data Descriptions
+
+. 
+. *Average and dispersion of each brand's price
+
+. summarize PPk_Stk-PHse_Tub
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}PPk_Stk {c |}{res}      4,470    .5184362    .1505174        .19        .67
+{txt}{space 5}PBB_Stk {c |}{res}      4,470    .5432103    .1203319        .19       1.01
+{txt}{space 5}PFl_Stk {c |}{res}      4,470     1.01502    .0428952        .95       1.16
+{txt}{space 4}PHse_Stk {c |}{res}      4,470    .4371477    .1188312        .19        .64
+{txt}{space 4}PGen_Stk {c |}{res}      4,470    .3452819    .0351661        .25        .55
+{txt}{hline 13}{c +}{hline 57}
+{space 4}PImp_Stk {c |}{res}      4,470    .7807785    .1146461        .33        2.3
+{txt}{space 5}PSS_Tub {c |}{res}      4,470    .8250895    .0612116         .5        .98
+{txt}{space 5}PPk_Tub {c |}{res}      4,470    1.077409    .0297261        .98       1.24
+{txt}{space 5}PFl_Tub {c |}{res}      4,470    1.189376    .0140545        .69       1.47
+{txt}{space 4}PHse_Tub {c |}{res}      4,470    .5686734     .072455        .33       1.27
+
+{com}. 
+. *Creating brand & type variable
+
+. generate brand="Pk"
+
+. replace brand="BB" if choice==2
+{txt}(699 real changes made)
+
+{com}. replace brand="Fl" if choice==3 | choice==9
+{txt}(468 real changes made)
+
+{com}. replace brand="Hse" if choice==4 | choice==10
+{txt}variable {bf}brand{sf} was {bf}{res}str2{sf}{txt} now {bf}{res}str3{sf}
+{txt}(626 real changes made)
+
+{com}. replace brand="Gen" if choice==5
+{txt}(315 real changes made)
+
+{com}. replace brand="Imp" if choice==6
+{txt}(74 real changes made)
+
+{com}. replace brand="SS" if choice==7
+{txt}(319 real changes made)
+
+{com}. generate type="Stick"
+
+. replace type="Tub" if choice>6
+{txt}(780 real changes made)
+
+{com}. 
+. *Market share by brand and by product type
+
+. tab brand
+
+      {txt}brand {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+         BB {c |}{res}        699       15.64       15.64
+{txt}         Fl {c |}{res}        468       10.47       26.11
+{txt}        Gen {c |}{res}        315        7.05       33.15
+{txt}        Hse {c |}{res}        626       14.00       47.16
+{txt}        Imp {c |}{res}         74        1.66       48.81
+{txt}         Pk {c |}{res}      1,969       44.05       92.86
+{txt}         SS {c |}{res}        319        7.14      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      4,470      100.00
+
+{com}. tab type
+
+       {txt}type {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+      Stick {c |}{res}      3,690       82.55       82.55
+{txt}        Tub {c |}{res}        780       17.45      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      4,470      100.00
+
+{com}. 
+. *Mapping between observed attributes and choices
+
+. qui tab Income choice
+
+. qui tab Fs3_4 choice
+
+. qui tab Fs5_ choice
+
+. qui tab Fam_Size choice
+
+. qui tab college choice
+
+. qui tab whtcollar choice
+
+. qui tab retired choice
+
+. 
+. *Ex2-Conditional Logit & Marginal Effects
+
+. 
+. *Expanding our dataset to create 10 (because 10 options) binary choice outcome for each individuals
+
+. gen d=_n
+
+. expand 10
+{txt}(40,230 observations created)
+
+{com}. bysort d: gen group_index = _n
+
+. gen choice_decision=0
+
+. gen price=0
+
+. replace price= PPk_Stk if group_index==1
+{txt}(4,470 real changes made)
+
+{com}. replace price= PBB_Stk if group_index==2
+{txt}(4,470 real changes made)
+
+{com}. replace price= PFl_Stk if group_index==3
+{txt}(4,470 real changes made)
+
+{com}. replace price= PHse_Stk if group_index==4
+{txt}(4,470 real changes made)
+
+{com}. replace price= PGen_Stk if group_index==5
+{txt}(4,470 real changes made)
+
+{com}. replace price= PImp_Stk if group_index==6
+{txt}(4,470 real changes made)
+
+{com}. replace price= PSS_Tub if group_index==7
+{txt}(4,470 real changes made)
+
+{com}. replace price= PPk_Tub if group_index==8
+{txt}(4,470 real changes made)
+
+{com}. replace price= PFl_Tub if group_index==9
+{txt}(4,470 real changes made)
+
+{com}. replace price= PHse_Tub if group_index==10
+{txt}(4,470 real changes made)
+
+{com}. replace choice_decision=1 if group_index==choice
+{txt}(4,470 real changes made)
+
+{com}. 
+. gen altname="Pk_Stk"
+
+. replace altname="BB_Stk" if group_index==2
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Fl_Stk" if group_index==3
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Hse_Stk" if group_index==4
+{txt}variable {bf}altname{sf} was {bf}{res}str6{sf}{txt} now {bf}{res}str7{sf}
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Gen_Stk" if group_index==5
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Imp_Stk" if group_index==6
+{txt}(4,470 real changes made)
+
+{com}. replace altname="SS_Tub" if group_index==7
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Pk_Tub" if group_index==8
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Fl_Tub" if group_index==9
+{txt}(4,470 real changes made)
+
+{com}. replace altname="Hse_Tub" if group_index==10
+{txt}(4,470 real changes made)
+
+{com}. 
+. global y choice_decision
+
+. global z price
+
+. global id d
+
+. global alternative altname
+
+. global basealternative1 Pk_Stk
+
+. eststo Cond_Logit: asclogit $y $z, case($id) alternatives($alternative) basealternative($basealternative1)
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-7559.2014}  
+Iteration 1:{space 3}log likelihood = {res:-7465.2594}  
+Iteration 2:{space 3}log likelihood = {res:-7464.9321}  
+Iteration 3:{space 3}log likelihood = {res:-7464.9321}  
+{res}
+{txt}Alternative-specific conditional logit{col 48}Number of obs{col 67}= {res}    44,700
+{txt}Case variable: d{col 48}Number of cases{col 67}= {res}      4470
+
+{txt}Alternative variable: altname{col 48}Alts per case: min = {res}        10
+{col 63}{txt}avg = {res}      10.0
+{col 63}{txt}max = {res}        10
+
+{txt}{col 51}Wald chi2({res}1{txt}){col 67}= {res}   1458.85
+{txt}Log likelihood = {res}-7464.9321{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}choice_dec~n{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}altname      {txt}{c |}
+{space 7}price {c |}{col 14}{res}{space 2}-6.656579{col 26}{space 2} .1742793{col 37}{space 1}  -38.19{col 46}{space 3}0.000{col 54}{space 4} -6.99816{col 67}{space 3}-6.314998
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}BB_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.9543068{col 26}{space 2} .0500462{col 37}{space 1}  -19.07{col 46}{space 3}0.000{col 54}{space 4}-1.052396{col 67}{space 3} -.856218
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.296968{col 26}{space 2} .1086515{col 37}{space 1}   11.94{col 46}{space 3}0.000{col 54}{space 4} 1.084015{col 67}{space 3} 1.509921
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 2.357505{col 26}{space 2}  .133774{col 37}{space 1}   17.62{col 46}{space 3}0.000{col 54}{space 4} 2.095313{col 67}{space 3} 2.619697
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Gen_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-2.904005{col 26}{space 2} .0714605{col 37}{space 1}  -40.64{col 46}{space 3}0.000{col 54}{space 4}-3.044065{col 67}{space 3}-2.763945
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.717332{col 26}{space 2} .0541582{col 37}{space 1}  -31.71{col 46}{space 3}0.000{col 54}{space 4} -1.82348{col 67}{space 3}-1.611184
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Tub      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-3.896594{col 26}{space 2}  .177419{col 37}{space 1}  -21.96{col 46}{space 3}0.000{col 54}{space 4}-4.244328{col 67}{space 3}-3.548859
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Imp_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.515311{col 26}{space 2} .1262303{col 37}{space 1}  -12.00{col 46}{space 3}0.000{col 54}{space 4}-1.762718{col 67}{space 3}-1.267904
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}Pk_Stk      {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Pk_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.464868{col 26}{space 2} .1180467{col 37}{space 1}   12.41{col 46}{space 3}0.000{col 54}{space 4} 1.233501{col 67}{space 3} 1.696236
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}SS_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .2517684{col 26}{space 2}  .079164{col 37}{space 1}    3.18{col 46}{space 3}0.001{col 54}{space 4} .0966098{col 67}{space 3}  .406927
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. esttab Cond_Logit, se(3) noeqlines nodepvars compress
+{res}
+{txt}{hline 23}
+{txt}                 (1)   
+{txt}           Cond_Lo~t   
+{txt}{hline 23}
+{res}altname                {txt}
+{txt}price     {res}    -6.657***{txt}
+          {res} {ralign 9:{txt:(}0.174{txt:)}}   {txt}
+
+{res}BB_Stk                 {txt}
+{txt}_cons     {res}    -0.954***{txt}
+          {res} {ralign 9:{txt:(}0.050{txt:)}}   {txt}
+
+{res}Fl_Stk                 {txt}
+{txt}_cons     {res}     1.297***{txt}
+          {res} {ralign 9:{txt:(}0.109{txt:)}}   {txt}
+
+{res}Fl_Tub                 {txt}
+{txt}_cons     {res}     2.358***{txt}
+          {res} {ralign 9:{txt:(}0.134{txt:)}}   {txt}
+
+{res}Gen_Stk                {txt}
+{txt}_cons     {res}    -2.904***{txt}
+          {res} {ralign 9:{txt:(}0.071{txt:)}}   {txt}
+
+{res}Hse_Stk                {txt}
+{txt}_cons     {res}    -1.717***{txt}
+          {res} {ralign 9:{txt:(}0.054{txt:)}}   {txt}
+
+{res}Hse_Tub                {txt}
+{txt}_cons     {res}    -3.897***{txt}
+          {res} {ralign 9:{txt:(}0.177{txt:)}}   {txt}
+
+{res}Imp_Stk                {txt}
+{txt}_cons     {res}    -1.515***{txt}
+          {res} {ralign 9:{txt:(}0.126{txt:)}}   {txt}
+
+{res}Pk_Tub                 {txt}
+{txt}_cons     {res}     1.465***{txt}
+          {res} {ralign 9:{txt:(}0.118{txt:)}}   {txt}
+
+{res}SS_Tub                 {txt}
+{txt}_cons     {res}     0.252** {txt}
+          {res} {ralign 9:{txt:(}0.079{txt:)}}   {txt}
+{txt}{hline 23}
+{txt}N         {res}     44700   {txt}
+{txt}{hline 23}
+{txt}Standard errors in parentheses
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. 
+. *Marginal Effects of price for each choice
+
+. eststo MEclogit: qui estat mfx, varlist($z)
+
+. 
+. *Ex3-Multinomial Logit & Marginal Effects
+
+. eststo mlogit: mlogit chosenprod Income
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res:-82858.567}  
+Iteration 1:{space 3}log likelihood = {res:-82500.042}  
+Iteration 2:{space 3}log likelihood = {res:-82369.693}  
+Iteration 3:{space 3}log likelihood = {res:-82367.572}  
+Iteration 4:{space 3}log likelihood = {res: -82367.57}  
+{res}
+{txt}Multinomial logistic regression{col 49}Number of obs{col 67}= {res}    44,700
+{txt}{col 49}LR chi2({res}9{txt}){col 67}= {res}    981.99
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res} -82367.57{txt}{col 49}Pseudo R2{col 67}= {res}    0.0059
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  chosenprod{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}BB_Stk       {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2}-.0030887{col 26}{space 2} .0009847{col 37}{space 1}   -3.14{col 46}{space 3}0.002{col 54}{space 4}-.0050188{col 67}{space 3}-.0011587
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.8453242{col 26}{space 2}  .029452{col 37}{space 1}  -28.70{col 46}{space 3}0.000{col 54}{space 4} -.903049{col 67}{space 3}-.7875993
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Stk       {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2} .0145862{col 26}{space 2} .0012097{col 37}{space 1}   12.06{col 46}{space 3}0.000{col 54}{space 4} .0122152{col 67}{space 3} .0169572
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.399858{col 26}{space 2} .0422418{col 37}{space 1}  -56.81{col 46}{space 3}0.000{col 54}{space 4} -2.48265{col 67}{space 3}-2.317065
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Tub       {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2}  .017743{col 26}{space 2} .0011897{col 37}{space 1}   14.91{col 46}{space 3}0.000{col 54}{space 4} .0154111{col 67}{space 3} .0200748
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.575597{col 26}{space 2} .0430513{col 37}{space 1}  -59.83{col 46}{space 3}0.000{col 54}{space 4}-2.659976{col 67}{space 3}-2.491218
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Gen_Stk      {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2}-.0012536{col 26}{space 2} .0013289{col 37}{space 1}   -0.94{col 46}{space 3}0.346{col 54}{space 4}-.0038582{col 67}{space 3}  .001351
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.690582{col 26}{space 2} .0401594{col 37}{space 1}  -42.10{col 46}{space 3}0.000{col 54}{space 4}-1.769293{col 67}{space 3}-1.611871
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Stk      {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2} .0040504{col 26}{space 2}  .000978{col 37}{space 1}    4.14{col 46}{space 3}0.000{col 54}{space 4} .0021337{col 67}{space 3} .0059672
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.201326{col 26}{space 2} .0307064{col 37}{space 1}  -39.12{col 46}{space 3}0.000{col 54}{space 4} -1.26151{col 67}{space 3}-1.141143
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Tub      {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2} .0107909{col 26}{space 2} .0032034{col 37}{space 1}    3.37{col 46}{space 3}0.001{col 54}{space 4} .0045124{col 67}{space 3} .0170695
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} -4.28227{col 26}{space 2}  .109349{col 37}{space 1}  -39.16{col 46}{space 3}0.000{col 54}{space 4} -4.49659{col 67}{space 3} -4.06795
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Imp_Stk      {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2}  .030612{col 26}{space 2}  .001478{col 37}{space 1}   20.71{col 46}{space 3}0.000{col 54}{space 4} .0277151{col 67}{space 3}  .033509
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-4.139767{col 26}{space 2} .0667206{col 37}{space 1}  -62.05{col 46}{space 3}0.000{col 54}{space 4}-4.270537{col 67}{space 3}-4.008998
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}Pk_Stk      {col 14}{txt}{c |}  (base outcome)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Pk_Tub       {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2} .0228862{col 26}{space 2} .0011453{col 37}{space 1}   19.98{col 46}{space 3}0.000{col 54}{space 4} .0206415{col 67}{space 3} .0251309
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.848353{col 26}{space 2} .0440773{col 37}{space 1}  -64.62{col 46}{space 3}0.000{col 54}{space 4}-2.934743{col 67}{space 3}-2.761963
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}SS_Tub       {txt}{c |}
+{space 6}Income {c |}{col 14}{res}{space 2}-.0069326{col 26}{space 2} .0013965{col 37}{space 1}   -4.96{col 46}{space 3}0.000{col 54}{space 4}-.0096697{col 67}{space 3}-.0041955
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.531042{col 26}{space 2} .0404909{col 37}{space 1}  -37.81{col 46}{space 3}0.000{col 54}{space 4}-1.610402{col 67}{space 3}-1.451681
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. esttab Cond_Logit mlogit, se(3) nogaps noeqlines nodepvars compress wide title(Effects of Price, Income on Demand: Conditional & Multinomial Logit Regression)
+{res}
+{txt}Effects of Price, Income on Demand: Conditional & Multinomial Logit Regression
+{txt}{hline 56}
+{txt}                 (1)                    (2)             
+{txt}           Cond_Lo~t                 mlogit             
+{txt}{hline 56}
+{res}main                                                    {txt}
+{txt}price     {res}    -6.657*** {ralign 9:{txt:(}0.174{txt:)}}                       {txt}
+{txt}Income    {res}                         -0.00309**  {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}                           -0.845*** {ralign 9:{txt:(}0.029{txt:)}}{txt}
+{res}BB_Stk                                                  {txt}
+{txt}_cons     {res}    -0.954*** {ralign 9:{txt:(}0.050{txt:)}}                       {txt}
+{res}Fl_Stk                                                  {txt}
+{txt}Income    {res}                           0.0146*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}     1.297*** {ralign 9:{txt:(}0.109{txt:)}}    -2.400*** {ralign 9:{txt:(}0.042{txt:)}}{txt}
+{res}Fl_Tub                                                  {txt}
+{txt}Income    {res}                           0.0177*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}     2.358*** {ralign 9:{txt:(}0.134{txt:)}}    -2.576*** {ralign 9:{txt:(}0.043{txt:)}}{txt}
+{res}Gen_Stk                                                 {txt}
+{txt}Income    {res}                         -0.00125    {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}    -2.904*** {ralign 9:{txt:(}0.071{txt:)}}    -1.691*** {ralign 9:{txt:(}0.040{txt:)}}{txt}
+{res}Hse_Stk                                                 {txt}
+{txt}Income    {res}                          0.00405*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}    -1.717*** {ralign 9:{txt:(}0.054{txt:)}}    -1.201*** {ralign 9:{txt:(}0.031{txt:)}}{txt}
+{res}Hse_Tub                                                 {txt}
+{txt}Income    {res}                           0.0108*** {ralign 9:{txt:(}0.003{txt:)}}{txt}
+{txt}_cons     {res}    -3.897*** {ralign 9:{txt:(}0.177{txt:)}}    -4.282*** {ralign 9:{txt:(}0.109{txt:)}}{txt}
+{res}Imp_Stk                                                 {txt}
+{txt}Income    {res}                           0.0306*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}    -1.515*** {ralign 9:{txt:(}0.126{txt:)}}    -4.140*** {ralign 9:{txt:(}0.067{txt:)}}{txt}
+{res}Pk_Tub                                                  {txt}
+{txt}Income    {res}                           0.0229*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}     1.465*** {ralign 9:{txt:(}0.118{txt:)}}    -2.848*** {ralign 9:{txt:(}0.044{txt:)}}{txt}
+{res}SS_Tub                                                  {txt}
+{txt}Income    {res}                         -0.00693*** {ralign 9:{txt:(}0.001{txt:)}}{txt}
+{txt}_cons     {res}     0.252**  {ralign 9:{txt:(}0.079{txt:)}}    -1.531*** {ralign 9:{txt:(}0.040{txt:)}}{txt}
+{res}Pk_Stk                                                  {txt}
+{txt}Income    {res}                                0    {ralign 9:{txt:(}.{txt:)}}{txt}
+{txt}_cons     {res}                                0    {ralign 9:{txt:(}.{txt:)}}{txt}
+{txt}{hline 56}
+{txt}N         {res}     44700                  44700             {txt}
+{txt}{hline 56}
+{txt}Standard errors in parentheses
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. 
+. *Marginal Effects of Income for each choice
+
+. mfx, predict(pr outcome(1))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==BB_Stk) (predict, pr outcome(1))
+         = {res} .15691816
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res}-.0009036      .00012   -7.56   0.000  -.001138 -.000669   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm1
+
+. mfx, predict(pr outcome(2))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Fl_Stk) (predict, pr outcome(2))
+         = {res} .05406295
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res} .0006443      .00006   11.16   0.000   .000531  .000757   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm2
+
+. mfx, predict(pr outcome(3))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Fl_Tub) (predict, pr outcome(3))
+         = {res} .04948833
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res}  .000746      .00005   14.40   0.000   .000644  .000848   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm3
+
+. mfx, predict(pr outcome(4))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Gen_Stk) (predict, pr outcome(4))
+         = {res} .07089742
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res}-.0002781      .00008   -3.34   0.001  -.000441 -.000115   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm4
+
+. mfx, predict(pr outcome(5))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Hse_Stk) (predict, pr outcome(5))
+         = {res} .13391688
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res} .0001849       .0001    1.78   0.076  -.000019  .000389   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm5
+
+. mfx, predict(pr outcome(6))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Hse_Tub) (predict, pr outcome(6))
+         = {res} .00740936
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res} .0000602      .00002    2.59   0.010   .000015  .000106   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm6
+
+. mfx, predict(pr outcome(7))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Imp_Stk) (predict, pr outcome(7))
+         = {res} .01478444
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res} .0004131      .00002   19.68   0.000   .000372  .000454   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm7
+
+. mfx, predict(pr outcome(8))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Pk_Stk) (predict, pr outcome(8))
+         = {res} .39801714
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res}-.0010625      .00015   -6.90   0.000  -.001364 -.000761   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm8
+
+. mfx, predict(pr outcome(9))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==Pk_Tub) (predict, pr outcome(9))
+         = {res} .04343488
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res} .0008781      .00004   20.16   0.000   .000793  .000963   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm9
+
+. mfx, predict(pr outcome(10))
+
+{txt}Marginal effects after mlogit
+      y  = Pr(chosenprod==SS_Tub) (predict, pr outcome(10))
+         = {res} .07107045
+{txt}{hline 9}{c TT}{hline 68}
+variable {c |}{col 17}dy/dx{col 26}Std. Err.{col 40}z{col 45}P>|z|{col 52}[    95% C.I.   ]{col 75}X
+{hline 9}{c +}{hline 68}
+  Income {c |}  {res}-.0006824      .00009   -7.80   0.000  -.000854 -.000511   27.6639
+{txt}{hline 9}{c BT}{hline 68}
+
+{com}. estimates store MEm10
+
+. esttab MEm1 MEm2 MEm3 MEm4 MEm5 MEm6 MEm7 MEm8 MEm9 MEm10, se(3) nocons nogaps noeqlines not nopa title(Marginal Effects of Income at Each Choice)
+{res}
+{txt}Marginal Effects of Income at Each Choice
+{txt}{hline 172}
+{txt}                      (1)             (2)             (3)             (4)             (5)             (6)             (7)             (8)             (9)            (10)   
+{txt}               chosenprod      chosenprod      chosenprod      chosenprod      chosenprod      chosenprod      chosenprod      chosenprod      chosenprod      chosenprod   
+{txt}{hline 172}
+{res}BB_Stk                                                                                                                                                                      {txt}
+{txt}Income      {res}     -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309**      -0.00309** {txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Fl_Stk                                                                                                                                                                      {txt}
+{txt}Income      {res}       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***       0.0146***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Fl_Tub                                                                                                                                                                      {txt}
+{txt}Income      {res}       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***       0.0177***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Gen_Stk                                                                                                                                                                     {txt}
+{txt}Income      {res}     -0.00125        -0.00125        -0.00125        -0.00125        -0.00125        -0.00125        -0.00125        -0.00125        -0.00125        -0.00125   {txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Hse_Stk                                                                                                                                                                     {txt}
+{txt}Income      {res}      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***      0.00405***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Hse_Tub                                                                                                                                                                     {txt}
+{txt}Income      {res}       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***       0.0108***{txt}
+            {res}        0.003           0.003           0.003           0.003           0.003           0.003           0.003           0.003           0.003           0.003   {txt}
+{res}Imp_Stk                                                                                                                                                                     {txt}
+{txt}Income      {res}       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***       0.0306***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}Pk_Stk                                                                                                                                                                      {txt}
+{txt}Income      {res}            0               0               0               0               0               0               0               0               0               0   {txt}
+            {res}            .               .               .               .               .               .               .               .               .               .   {txt}
+{res}Pk_Tub                                                                                                                                                                      {txt}
+{txt}Income      {res}       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***       0.0229***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{res}SS_Tub                                                                                                                                                                      {txt}
+{txt}Income      {res}     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***     -0.00693***{txt}
+            {res}        0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001           0.001   {txt}
+{txt}{hline 172}
+{txt}N           {res}        44700           44700           44700           44700           44700           44700           44700           44700           44700           44700   {txt}
+{txt}{hline 172}
+{txt}Standard errors in second row
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. 
+. *Ex5-Mixed Logit & IIA
+
+. asmixlogit $y, random($z) casevars($x) alternatives($alternative) case($id)
+{res}
+{txt}Fitting fixed parameter model:
+{res}
+{txt}Fitting full model:
+{res}
+{txt}Iteration 0:{space 3}log simulated likelihood = {res:-7463.2565}  (not concave)
+Iteration 1:{space 3}log simulated likelihood = {res:-7446.7392}  
+Iteration 2:{space 3}log simulated likelihood = {res:-7403.3213}  
+Iteration 3:{space 3}log simulated likelihood = {res:-7400.1019}  
+Iteration 4:{space 3}log simulated likelihood = {res:-7400.0816}  
+Iteration 5:{space 3}log simulated likelihood = {res:-7400.0816}  
+{res}
+{txt}Alternative-specific mixed logit{col 48}Number of obs{col 67}= {res}    44,700
+{txt}Case variable: {res}d{txt}{col 48}Number of cases{col 67}= {res}     4,470
+
+{txt}Alternative variable: {res}altname{txt}{col 48}Alts per case: min = {res}        10
+{col 63}{txt}avg = {res}      10.0
+{col 63}{txt}max = {res}        10
+{txt}Integration sequence:      {res}Hammersley
+{txt}Integration points:   {res}             50{txt}{col 51}Wald chi2({res}1{txt}){col 67}= {res}   1156.66
+{txt}Log simulated likelihood = {res}-7400.0816{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}choice_dec~n{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}altname      {txt}{c |}
+{space 7}price {c |}{col 14}{res}{space 2}-7.533769{col 26}{space 2} .2215178{col 37}{space 1}  -34.01{col 46}{space 3}0.000{col 54}{space 4}-7.967936{col 67}{space 3}-7.099602
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Normal       {txt}{c |}
+{space 4}sd(price){c |}{col 14}{res}{space 2}  3.63358{col 26}{space 2} .2929347{col 54}{space 4} 3.102501{col 67}{space 3} 4.255568
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}BB_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.044742{col 26}{space 2} .0539767{col 37}{space 1}  -19.36{col 46}{space 3}0.000{col 54}{space 4}-1.150534{col 67}{space 3}-.9389492
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .9389531{col 26}{space 2} .1403261{col 37}{space 1}    6.69{col 46}{space 3}0.000{col 54}{space 4}  .663919{col 67}{space 3} 1.213987
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.459311{col 26}{space 2} .2091195{col 37}{space 1}    6.98{col 46}{space 3}0.000{col 54}{space 4} 1.049444{col 67}{space 3} 1.869178
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Gen_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-3.483849{col 26}{space 2} .0980598{col 37}{space 1}  -35.53{col 46}{space 3}0.000{col 54}{space 4}-3.676043{col 67}{space 3}-3.291656
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.954758{col 26}{space 2} .0622915{col 37}{space 1}  -31.38{col 46}{space 3}0.000{col 54}{space 4}-2.076847{col 67}{space 3}-1.832669
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Tub      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-4.223657{col 26}{space 2} .1880926{col 37}{space 1}  -22.46{col 46}{space 3}0.000{col 54}{space 4}-4.592312{col 67}{space 3}-3.855003
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Imp_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.500081{col 26}{space 2} .1295125{col 37}{space 1}  -11.58{col 46}{space 3}0.000{col 54}{space 4}-1.753921{col 67}{space 3}-1.246242
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}Pk_Stk      {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Pk_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}  .969126{col 26}{space 2} .1612858{col 37}{space 1}    6.01{col 46}{space 3}0.000{col 54}{space 4} .6530117{col 67}{space 3}  1.28524
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}SS_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .2454119{col 26}{space 2}   .08591{col 37}{space 1}    2.86{col 46}{space 3}0.004{col 54}{space 4} .0770315{col 67}{space 3} .4137924
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test vs. fixed parameters: {help j_chibar##|_new:chibar2(01) =} {res}  129.70{txt}{col 55}Prob >= chibar2 = {res}{col 73}0.0000
+
+{com}. eststo mixlogitfull
+
+. 
+. *To test for IIA, we remove one choice from our data and later compare likelihood score of both regressions:
+
+. drop if group_index==10
+{txt}(4,470 observations deleted)
+
+{com}. asmixlogit $y, random($z) casevars($x) alternatives($alternative) case($id)
+{txt}{p 0 6 2 }Note: 33 cases (297 obs) dropped due to no positive outcome, multiple positive outcomes, or a single observation per case{p_end}
+{res}
+{txt}Fitting fixed parameter model:
+{res}
+{txt}Fitting full model:
+{res}
+{txt}Iteration 0:{space 3}log simulated likelihood = {res:-7285.0768}  (not concave)
+Iteration 1:{space 3}log simulated likelihood = {res: -7266.419}  
+Iteration 2:{space 3}log simulated likelihood = {res:-7221.5707}  
+Iteration 3:{space 3}log simulated likelihood = {res:-7218.5772}  
+Iteration 4:{space 3}log simulated likelihood = {res:-7218.5682}  
+Iteration 5:{space 3}log simulated likelihood = {res:-7218.5681}  
+{res}
+{txt}Alternative-specific mixed logit{col 48}Number of obs{col 67}= {res}    39,933
+{txt}Case variable: {res}d{txt}{col 48}Number of cases{col 67}= {res}     4,437
+
+{txt}Alternative variable: {res}altname{txt}{col 48}Alts per case: min = {res}         9
+{col 63}{txt}avg = {res}       9.0
+{col 63}{txt}max = {res}         9
+{txt}Integration sequence:      {res}Hammersley
+{txt}Integration points:   {res}             50{txt}{col 51}Wald chi2({res}1{txt}){col 67}= {res}   1097.06
+{txt}Log simulated likelihood = {res}-7218.5681{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}choice_dec~n{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}altname      {txt}{c |}
+{space 7}price {c |}{col 14}{res}{space 2}-7.663716{col 26}{space 2} .2313787{col 37}{space 1}  -33.12{col 46}{space 3}0.000{col 54}{space 4} -8.11721{col 67}{space 3}-7.210222
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Normal       {txt}{c |}
+{space 4}sd(price){c |}{col 14}{res}{space 2} 3.771968{col 26}{space 2} .3042761{col 54}{space 4} 3.220353{col 67}{space 3} 4.418069
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}BB_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.052987{col 26}{space 2} .0543446{col 37}{space 1}  -19.38{col 46}{space 3}0.000{col 54}{space 4}  -1.1595{col 67}{space 3}-.9464736
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Stk       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .9598872{col 26}{space 2} .1422574{col 37}{space 1}    6.75{col 46}{space 3}0.000{col 54}{space 4} .6810679{col 67}{space 3} 1.238707
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Fl_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.466986{col 26}{space 2} .2124455{col 37}{space 1}    6.91{col 46}{space 3}0.000{col 54}{space 4}   1.0506{col 67}{space 3} 1.883371
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Gen_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-3.545021{col 26}{space 2} .1028992{col 37}{space 1}  -34.45{col 46}{space 3}0.000{col 54}{space 4}  -3.7467{col 67}{space 3}-3.343342
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Hse_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.975838{col 26}{space 2} .0633228{col 37}{space 1}  -31.20{col 46}{space 3}0.000{col 54}{space 4}-2.099948{col 67}{space 3}-1.851728
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Imp_Stk      {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.481649{col 26}{space 2} .1300377{col 37}{space 1}  -11.39{col 46}{space 3}0.000{col 54}{space 4}-1.736518{col 67}{space 3}-1.226779
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}Pk_Stk      {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Pk_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .9870312{col 26}{space 2} .1635585{col 37}{space 1}    6.03{col 46}{space 3}0.000{col 54}{space 4} .6664624{col 67}{space 3}   1.3076
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}SS_Tub       {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .2676273{col 26}{space 2} .0868779{col 37}{space 1}    3.08{col 46}{space 3}0.002{col 54}{space 4} .0973497{col 67}{space 3} .4379048
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test vs. fixed parameters: {help j_chibar##|_new:chibar2(01) =} {res}  136.41{txt}{col 55}Prob >= chibar2 = {res}{col 73}0.0000
+
+{com}. eststo mixlogitpartial
+
+. hausman mixlogitfull mixlogitpartial, alleqs constant
+
+{txt}{col 18}{hline 4} Coefficients {hline 4}
+{col 14}{c |}{col 21}(b){col 34}(B){col 49}(b-B){col 59}sqrt(diag(V_b-V_B))
+{col 14}{c |}{col 17}mixlogitfull{col 30}mixlogitpa~l{col 46}Difference{col 66}S.E.
+{hline 13}{c +}{hline 64}
+{res}altname{col 14}{txt}{c |}
+{space 7}price {c |}{res}{col 18}-7.533769{col 31}-7.663716{col 47} .1299471{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Normal{col 14}{txt}{c |}
+{space 4}sd(price){c |}{res}{col 18}  3.63358{col 31} 3.771968{col 47}-.1383883{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}BB_Stk{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18}-1.044742{col 31}-1.052987{col 47} .0082455{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Fl_Stk{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18} .9389531{col 31} .9598872{col 47}-.0209342{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Fl_Tub{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18} 1.459311{col 31} 1.466986{col 47}-.0076747{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Gen_Stk{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18}-3.483849{col 31}-3.545021{col 47} .0611716{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Hse_Stk{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18}-1.954758{col 31}-1.975838{col 47} .0210797{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Imp_Stk{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18}-1.500081{col 31}-1.481649{col 47}-.0184327{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}Pk_Tub{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18}  .969126{col 31} .9870312{col 47}-.0179052{col 63}        .
+{txt}{hline 13}{c +}{hline 64}
+{res}SS_Tub{col 14}{txt}{c |}
+{space 7}_cons {c |}{res}{col 18} .2454119{col 31} .2676273{col 47}-.0222153{col 63}        .
+{txt}{hline 13}{c BT}{hline 64}
+{ralign 78:b = consistent under Ho and Ha; obtained from asmixlogit}
+{ralign 78:B = inconsistent under Ha, efficient under Ho; obtained from asmixlogit}
+
+    Test:  Ho:  difference in coefficients not systematic
+
+{ralign 25:chi2({res:10})} = (b-B)'[(V_b-V_B)^(-1)](b-B)
+{col 27}={res}    -4.68{txt}{col 41}chi2<0 ==> model fitted on these
+{col 41}data fails to meet the asymptotic
+{col 41}assumptions of the Hausman test;
+{col 41}see {help suest##|_new:suest} for a generalized test
+
+{com}. 
+. *The result of Hausman test is -4.68, meaning that H0 is rejected and IIA is violated
+
+. 
+. *HW4 Linear Panel Data
+
+. use "/Users/davidch91/Desktop/613/HW5/KoopTobias.dta", clear
+
+. 
+. *Creating time variable and establishing panel dimension
+
+. gen t=1
+
+. replace t=t[_n-1]+1 if personid[_n]==personid[_n-1]
+{txt}(15,741 real changes made)
+
+{com}. xtset personid timetrnd
+{res}{txt}{col 8}panel variable:  {res}personid (unbalanced)
+{txt}{col 9}time variable:  {res}{col 25}timetrnd, 0 to 14, but with gaps
+{txt}{col 17}delta:  {res}1 unit
+
+{com}. 
+. *Random Effects
+
+. eststo Random: xtreg logwage educ potexper, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}    17,919
+{txt}Group variable: {res}personid                        {txt}Number of groups  = {res}     2,178
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1961                                         {txt}min = {res}         1
+{txt}     between = {res}0.1533                                         {txt}avg = {res}       8.2
+{txt}     overall = {res}0.1578                                         {txt}max = {res}        15
+
+                                                {txt}Wald chi2({res}2{txt})      =  {res}  4209.96
+{txt}corr(u_i, X)   = {res}0{txt} (assumed)                    Prob > chi2       =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2}  .107938{col 26}{space 2} .0033832{col 37}{space 1}   31.90{col 46}{space 3}0.000{col 54}{space 4} .1013071{col 67}{space 3}  .114569
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0387645{col 26}{space 2} .0007178{col 37}{space 1}   54.00{col 46}{space 3}0.000{col 54}{space 4} .0373576{col 67}{space 3} .0401714
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .5635206{col 26}{space 2} .0438846{col 37}{space 1}   12.84{col 46}{space 3}0.000{col 54}{space 4} .4775083{col 67}{space 3} .6495328
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .37207276
+     {txt}sigma_e {c |} {res} .33545728
+         {txt}rho {c |} {res}  .5516129{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+
+{com}. eststo Fixed_B: xtreg logwage educ potexper, be
+
+{txt}Between regression (regression on group means)  Number of obs     = {res}    17,919
+{txt}Group variable: {res}personid                        {txt}Number of groups  = {res}     2,178
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1962                                         {txt}min = {res}         1
+{txt}     between = {res}0.1553                                         {txt}avg = {res}       8.2
+{txt}     overall = {res}0.1518                                         {txt}max = {res}        15
+
+                                                {txt}F({res}2{txt},{res}2175{txt})         =  {res}   200.01
+{txt}sd(u_i + avg(e_i.))= {res} .3991313                  {txt}Prob > F          =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2} .0930999{col 26}{space 2} .0046685{col 37}{space 1}   19.94{col 46}{space 3}0.000{col 54}{space 4} .0839447{col 67}{space 3} .1022551
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0259987{col 26}{space 2} .0036049{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} .0189294{col 67}{space 3} .0330681
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8455688{col 26}{space 2} .0770179{col 37}{space 1}   10.98{col 46}{space 3}0.000{col 54}{space 4} .6945324{col 67}{space 3} .9966052
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. eststo Fixed_W: xtreg logwage educ potexper, fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}    17,919
+{txt}Group variable: {res}personid{txt}{col 49}Number of groups{col 67}={col 69}{res}     2,178
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.1964{col 63}{txt}min{col 67}={col 69}{res}         1
+{txt}     between = {res}0.1550{col 63}{txt}avg{col 67}={col 69}{res}       8.2
+{txt}     overall = {res}0.1551{col 63}{txt}max{col 67}={col 69}{res}        15
+
+{txt}{col 49}F({res}2{txt},{res}15739{txt}){col 67}={col 70}{res}  1923.47
+{txt}corr(u_i, Xb){col 16}= {res}-0.1273{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2}  .123662{col 26}{space 2} .0057619{col 37}{space 1}   21.46{col 46}{space 3}0.000{col 54}{space 4} .1123681{col 67}{space 3} .1349559
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0385611{col 26}{space 2} .0007585{col 37}{space 1}   50.84{col 46}{space 3}0.000{col 54}{space 4} .0370744{col 67}{space 3} .0400478
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4068016{col 26}{space 2} .0717348{col 37}{space 1}    5.67{col 46}{space 3}0.000{col 54}{space 4} .2661931{col 67}{space 3}   .54741
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .40290853
+     {txt}sigma_e {c |} {res} .33545728
+         {txt}rho {c |} {res} .59059603{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}2177{txt}, {res}15739{txt}) = {res}9.95{col 62}{txt}Prob > F = {res}0.0000
+
+{com}. eststo Pool LS: reg
+{err}name:  too many specified
+{txt}{search r(103), local:r(103);}
+
+{com}. esttab Random Fixed_B Fixed_W Pool_LS, se(3) nocons nogaps noeqlines not nopa title(Estimated Coefficients of Different Panel Data Models)
+{err}estimation result Pool_LS not found
+{txt}{search r(111), local:r(111);}
+
+{com}. eststo Pool_LS: reg
+
+{txt}Linear regression, absorbing indicators         Number of obs     = {res}    17,919
+                                                {txt}F(2, 15739)       =  {res}  1923.47
+                                                {txt}Prob > F          = {res}    0.0000
+                                                {txt}R-squared         = {res}    0.1964
+                                                {txt}Adj R-squared     = {res}    0.0852
+                                                {txt}Root MSE          =    {res} .33546
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2}  .123662{col 26}{space 2} .0057619{col 37}{space 1}   21.46{col 46}{space 3}0.000{col 54}{space 4} .1123681{col 67}{space 3} .1349559
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0385611{col 26}{space 2} .0007585{col 37}{space 1}   50.84{col 46}{space 3}0.000{col 54}{space 4} .0370744{col 67}{space 3} .0400478
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4068016{col 26}{space 2} .0717348{col 37}{space 1}    5.67{col 46}{space 3}0.000{col 54}{space 4} .2661931{col 67}{space 3}   .54741
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. esttab Random Fixed_B Fixed_W Pool_LS, se(3) nocons nogaps noeqlines not nopa title(Estimated Coefficients of Different Panel Data Models)
+{res}
+{txt}Estimated Coefficients of Different Panel Data Models
+{txt}{hline 76}
+{txt}                      (1)             (2)             (3)             (4)   
+{txt}                  logwage         logwage         logwage         logwage   
+{txt}{hline 76}
+{txt}educ        {res}        0.108***       0.0931***        0.124***        0.124***{txt}
+            {res}        0.003           0.005           0.006           0.006   {txt}
+{txt}potexper    {res}       0.0388***       0.0260***       0.0386***       0.0386***{txt}
+            {res}        0.001           0.004           0.001           0.001   {txt}
+{txt}{hline 76}
+{txt}N           {res}        17919           17919           17919           17919   {txt}
+{txt}{hline 76}
+{txt}Standard errors in second row
+{txt}* p<0.05, ** p<0.01, *** p<0.001
+
+{com}. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/davidch91/Desktop/613/HW5/HW5_result.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}16 Apr 2019, 22:09:20
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
